@@ -127,8 +127,16 @@ WSGI_APPLICATION = "smarthunt.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "smarthunt",
+        "USER": "root",
+        "PASSWORD": "",  # XAMPP default is empty password
+        "HOST": "127.0.0.1",  # Use IP instead of localhost for XAMPP
+        "PORT": "3306",
+        "OPTIONS": {
+            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+            "charset": "utf8mb4",
+        },
     }
 }
 
@@ -184,14 +192,8 @@ AUTH_USER_MODEL = 'users.User'
 # Channel layer (Redis recommended)
 CHANNEL_LAYERS = {
     "default": {
-        # For production/dev with Redis:
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
-        },
-        # If no Redis, you can use InMemoryChannelLayer (dev only)
-        # "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
 }
 
 # CORS settings for frontend integration
