@@ -1,0 +1,43 @@
+{% extends "emails/base.html" %}
+
+{% block title %}Welcome to SmartHunt{% endblock %}
+
+{% block content %}
+<h2 style="color: #e74c3c; margin-bottom: 20px;">
+    Welcome to SmartHunt, {{ user.first_name|default:user.username }}! 🎉
+</h2>
+
+<p>Thank you for joining our smart property rental platform. We're excited to help you find your perfect home!</p>
+
+<div class="property-info">
+    <h3 style="margin-top: 0; color: #2d3436;">What you can do with SmartHunt:</h3>
+    <ul style="margin: 15px 0;">
+        <li><strong>🔍 Browse Properties:</strong> Discover amazing rental properties in your area</li>
+        <li><strong>❤️ Save Favorites:</strong> Keep track of properties you love</li>
+        <li><strong>💬 Direct Messaging:</strong> Chat directly with landlords</li>
+        <li><strong>📋 Easy Booking:</strong> Submit booking requests with just a few clicks</li>
+        <li><strong>🔧 Maintenance Requests:</strong> Report issues quickly and efficiently</li>
+        <li><strong>⭐ Reviews & Ratings:</strong> Share your experiences and read others</li>
+    </ul>
+</div>
+
+{% if user.role == 'tenant' %}
+<p>As a <strong>tenant</strong>, you can start browsing available properties and connect with landlords right away.</p>
+<a href="#" class="button">🏠 Start Browsing Properties</a>
+{% elif user.role == 'landlord' %}
+<p>As a <strong>landlord</strong>, you can list your properties and start connecting with potential tenants.</p>
+<a href="#" class="button">📝 List Your First Property</a>
+{% endif %}
+
+<p style="margin-top: 30px;">
+    <strong>Need help getting started?</strong><br>
+    Check out our <a href="#" style="color: #e74c3c;">quick start guide</a> or 
+    <a href="#" style="color: #e74c3c;">contact our support team</a> if you have any questions.
+</p>
+
+<div style="background-color: #e8f5e8; border: 1px solid #c3e6c3; border-radius: 5px; padding: 15px; margin: 20px 0;">
+    <p style="margin: 0; color: #155724;">
+        <strong>💡 Pro Tip:</strong> Complete your profile to increase your chances of successful bookings and connections!
+    </p>
+</div>
+{% endblock %}

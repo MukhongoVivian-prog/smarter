@@ -1,0 +1,164 @@
+{% extends "emails/base.html" %}
+
+{% block title %}Booking {{ notification_type|title }} - SmartHunt{% endblock %}
+
+{% block content %}
+{% if notification_type == 'created' %}
+    <h2 style="color: #e74c3c; margin-bottom: 20px;">
+        🏠 New Booking Request Received!
+    </h2>
+    
+    <p>Hello {{ recipient.first_name|default:recipient.username }},</p>
+    
+    <p>You have received a new booking request for your property. Here are the details:</p>
+    
+    <div class="property-info">
+        <h3 style="margin-top: 0; color: #2d3436;">📋 Booking Details</h3>
+        <p><strong>Property:</strong> {{ booking.property.title }}</p>
+        <p><strong>Location:</strong> {{ booking.property.location }}</p>
+        <p><strong>Tenant:</strong> {{ booking.tenant.first_name }} {{ booking.tenant.last_name }} ({{ booking.tenant.username }})</p>
+        <p><strong>Email:</strong> {{ booking.tenant.email }}</p>
+        {% if booking.check_in_date %}
+        <p><strong>Check-in Date:</strong> {{ booking.check_in_date|date:"F d, Y" }}</p>
+        {% endif %}
+        {% if booking.check_out_date %}
+        <p><strong>Check-out Date:</strong> {{ booking.check_out_date|date:"F d, Y" }}</p>
+        {% endif %}
+        <p><strong>Request Date:</strong> {{ booking.created_at|date:"F d, Y \a\t g:i A" }}</p>
+        {% if booking.message %}
+        <p><strong>Message from Tenant:</strong></p>
+        <p style="font-style: italic; background-color: #f8f9fa; padding: 10px; border-left: 3px solid #e74c3c;">
+            "{{ booking.message }}"
+        </p>
+        {% endif %}
+    </div>
+    
+    <p>Please review this request and respond promptly to maintain a good tenant experience.</p>
+    
+    <a href="#" class="button">📋 Review & Respond to Request</a>
+
+{% elif notification_type == 'approved' %}
+    <h2 style="color: #00b894; margin-bottom: 20px;">
+        ✅ Great News! Your Booking Request was Approved!
+    </h2>
+    
+    <p>Hello {{ recipient.first_name|default:recipient.username }},</p>
+    
+    <p>Congratulations! Your booking request has been approved by the landlord.</p>
+    
+    <div class="property-info">
+        <h3 style="margin-top: 0; color: #2d3436;">🎉 Approved Booking Details</h3>
+        <p><strong>Property:</strong> {{ booking.property.title }}</p>
+        <p><strong>Location:</strong> {{ booking.property.location }}</p>
+        <p><strong>Landlord:</strong> {{ booking.property.owner.first_name }} {{ booking.property.owner.last_name }}</p>
+        <p><strong>Status:</strong> <span class="status-badge status-approved">Approved</span></p>
+        {% if booking.check_in_date %}
+        <p><strong>Check-in Date:</strong> {{ booking.check_in_date|date:"F d, Y" }}</p>
+        {% endif %}
+        {% if booking.check_out_date %}
+        <p><strong>Check-out Date:</strong> {{ booking.check_out_date|date:"F d, Y" }}</p>
+        {% endif %}
+        {% if booking.landlord_response %}
+        <p><strong>Landlord's Message:</strong></p>
+        <p style="font-style: italic; background-color: #d1f2eb; padding: 10px; border-left: 3px solid #00b894;">
+            "{{ booking.landlord_response }}"
+        </p>
+        {% endif %}
+    </div>
+    
+    <p><strong>Next Steps:</strong></p>
+    <ul>
+        <li>Contact the landlord to arrange key pickup and move-in details</li>
+        <li>Review the property rules and guidelines</li>
+        <li>Prepare for your check-in date</li>
+    </ul>
+    
+    <a href="#" class="button">💬 Contact Landlord</a>
+
+{% elif notification_type == 'declined' %}
+    <h2 style="color: #e17055; margin-bottom: 20px;">
+        📋 Booking Request Update
+    </h2>
+    
+    <p>Hello {{ recipient.first_name|default:recipient.username }},</p>
+    
+    <p>We wanted to update you on your booking request for "{{ booking.property.title }}".</p>
+    
+    <div class="property-info">
+        <h3 style="margin-top: 0; color: #2d3436;">📋 Booking Details</h3>
+        <p><strong>Property:</strong> {{ booking.property.title }}</p>
+        <p><strong>Location:</strong> {{ booking.property.location }}</p>
+        <p><strong>Status:</strong> <span class="status-badge status-declined">Not Available</span></p>
+        {% if booking.landlord_response %}
+        <p><strong>Landlord's Message:</strong></p>
+        <p style="font-style: italic; background-color: #fadbd8; padding: 10px; border-left: 3px solid #e17055;">
+            "{{ booking.landlord_response }}"
+        </p>
+        {% endif %}
+    </div>
+    
+    <p>Don't worry! There are many other great properties available on SmartHunt.</p>
+    
+    <a href="#" class="button">🔍 Browse More Properties</a>
+
+{% elif notification_type == 'checked_in' %}
+    <h2 style="color: #0984e3; margin-bottom: 20px;">
+        🔑 Tenant Has Checked In
+    </h2>
+    
+    <p>Hello {{ recipient.first_name|default:recipient.username }},</p>
+    
+    <p>{{ booking.tenant.first_name }} {{ booking.tenant.last_name }} has successfully checked in to your property.</p>
+    
+    <div class="property-info">
+        <h3 style="margin-top: 0; color: #2d3436;">✅ Check-in Confirmation</h3>
+        <p><strong>Property:</strong> {{ booking.property.title }}</p>
+        <p><strong>Tenant:</strong> {{ booking.tenant.first_name }} {{ booking.tenant.last_name }}</p>
+        <p><strong>Check-in Date:</strong> {{ booking.checked_in_at|date:"F d, Y \a\t g:i A" }}</p>
+        <p><strong>Status:</strong> <span class="status-badge status-approved">Active Booking</span></p>
+    </div>
+    
+    <p>The booking is now active. You can track the booking status in your dashboard.</p>
+    
+    <a href="#" class="button">📊 View Dashboard</a>
+
+{% elif notification_type == 'completed' %}
+    <h2 style="color: #00b894; margin-bottom: 20px;">
+        🎉 Booking Completed Successfully!
+    </h2>
+    
+    <p>Hello {{ recipient.first_name|default:recipient.username }},</p>
+    
+    <p>The booking for "{{ booking.property.title }}" has been completed.</p>
+    
+    <div class="property-info">
+        <h3 style="margin-top: 0; color: #2d3436;">✅ Completion Details</h3>
+        <p><strong>Property:</strong> {{ booking.property.title }}</p>
+        <p><strong>{% if recipient == booking.tenant %}Landlord{% else %}Tenant{% endif %}:</strong> 
+           {% if recipient == booking.tenant %}
+               {{ booking.property.owner.first_name }} {{ booking.property.owner.last_name }}
+           {% else %}
+               {{ booking.tenant.first_name }} {{ booking.tenant.last_name }}
+           {% endif %}
+        </p>
+        <p><strong>Completion Date:</strong> {{ booking.completed_at|date:"F d, Y \a\t g:i A" }}</p>
+        <p><strong>Status:</strong> <span class="status-badge status-completed">Completed</span></p>
+    </div>
+    
+    {% if recipient == booking.tenant %}
+    <p>Thank you for choosing SmartHunt! We hope you had a great experience.</p>
+    <a href="#" class="button">⭐ Leave a Review</a>
+    {% else %}
+    <p>Thank you for hosting through SmartHunt! We hope everything went smoothly.</p>
+    <a href="#" class="button">📊 View Booking History</a>
+    {% endif %}
+
+{% endif %}
+
+<div style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; padding: 15px; margin: 30px 0;">
+    <p style="margin: 0; color: #495057; font-size: 14px;">
+        <strong>Need Help?</strong> If you have any questions or concerns, please don't hesitate to 
+        <a href="#" style="color: #e74c3c;">contact our support team</a>. We're here to help!
+    </p>
+</div>
+{% endblock %}

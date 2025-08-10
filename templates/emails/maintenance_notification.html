@@ -1,0 +1,146 @@
+{% extends "emails/base.html" %}
+
+{% block title %}Maintenance {{ notification_type|title }} - SmartHunt{% endblock %}
+
+{% block content %}
+{% if notification_type == 'created' %}
+    <h2 style="color: #f39c12; margin-bottom: 20px;">
+        🔧 New Maintenance Request Submitted
+    </h2>
+    
+    <p>Hello {{ recipient.first_name|default:recipient.username }},</p>
+    
+    <p>A maintenance request has been submitted for your property. Please review the details below:</p>
+    
+    <div class="property-info">
+        <h3 style="margin-top: 0; color: #2d3436;">🏠 Maintenance Request Details</h3>
+        <p><strong>Property:</strong> {{ maintenance.property.title }}</p>
+        <p><strong>Location:</strong> {{ maintenance.property.location }}</p>
+        <p><strong>Tenant:</strong> {{ maintenance.tenant.first_name }} {{ maintenance.tenant.last_name }} ({{ maintenance.tenant.username }})</p>
+        <p><strong>Contact:</strong> {{ maintenance.tenant.email }}</p>
+        <p><strong>Request Date:</strong> {{ maintenance.created_at|date:"F d, Y \a\t g:i A" }}</p>
+        <p><strong>Priority:</strong> 
+            {% if maintenance.priority == 'high' %}
+                <span style="color: #e74c3c; font-weight: bold;">🔴 High Priority</span>
+            {% elif maintenance.priority == 'medium' %}
+                <span style="color: #f39c12; font-weight: bold;">🟡 Medium Priority</span>
+            {% else %}
+                <span style="color: #27ae60; font-weight: bold;">🟢 Low Priority</span>
+            {% endif %}
+        </p>
+        <p><strong>Category:</strong> {{ maintenance.get_category_display|default:"General" }}</p>
+        
+        <div style="margin-top: 15px;">
+            <strong>Description:</strong>
+            <p style="background-color: #f8f9fa; padding: 15px; border-left: 4px solid #f39c12; margin: 10px 0; font-style: italic;">
+                "{{ maintenance.description }}"
+            </p>
+        </div>
+    </div>
+    
+    <p>Please address this request promptly to ensure tenant satisfaction and property maintenance.</p>
+    
+    <a href="#" class="button">🔧 View & Respond to Request</a>
+
+{% elif notification_type == 'in_progress' %}
+    <h2 style="color: #0984e3; margin-bottom: 20px;">
+        🔄 Maintenance Request In Progress
+    </h2>
+    
+    <p>Hello {{ recipient.first_name|default:recipient.username }},</p>
+    
+    <p>Good news! Your maintenance request is now being addressed.</p>
+    
+    <div class="property-info">
+        <h3 style="margin-top: 0; color: #2d3436;">🔄 Status Update</h3>
+        <p><strong>Property:</strong> {{ maintenance.property.title }}</p>
+        <p><strong>Request:</strong> {{ maintenance.description|truncatewords:15 }}</p>
+        <p><strong>Status:</strong> <span style="color: #0984e3; font-weight: bold;">🔄 In Progress</span></p>
+        <p><strong>Updated:</strong> {{ maintenance.updated_at|date:"F d, Y \a\t g:i A" }}</p>
+        {% if maintenance.landlord_notes %}
+        <div style="margin-top: 15px;">
+            <strong>Landlord's Notes:</strong>
+            <p style="background-color: #e3f2fd; padding: 15px; border-left: 4px solid #0984e3; margin: 10px 0; font-style: italic;">
+                "{{ maintenance.landlord_notes }}"
+            </p>
+        </div>
+        {% endif %}
+    </div>
+    
+    <p>We'll keep you updated on the progress. Thank you for your patience!</p>
+    
+    <a href="#" class="button">📋 View Request Details</a>
+
+{% elif notification_type == 'resolved' %}
+    <h2 style="color: #00b894; margin-bottom: 20px;">
+        ✅ Maintenance Request Resolved!
+    </h2>
+    
+    <p>Hello {{ recipient.first_name|default:recipient.username }},</p>
+    
+    <p>Great news! Your maintenance request has been resolved.</p>
+    
+    <div class="property-info">
+        <h3 style="margin-top: 0; color: #2d3436;">✅ Resolution Details</h3>
+        <p><strong>Property:</strong> {{ maintenance.property.title }}</p>
+        <p><strong>Original Request:</strong> {{ maintenance.description|truncatewords:15 }}</p>
+        <p><strong>Status:</strong> <span style="color: #00b894; font-weight: bold;">✅ Resolved</span></p>
+        <p><strong>Resolved Date:</strong> {{ maintenance.resolved_at|date:"F d, Y \a\t g:i A" }}</p>
+        {% if maintenance.resolution_notes %}
+        <div style="margin-top: 15px;">
+            <strong>Resolution Notes:</strong>
+            <p style="background-color: #d1f2eb; padding: 15px; border-left: 4px solid #00b894; margin: 10px 0; font-style: italic;">
+                "{{ maintenance.resolution_notes }}"
+            </p>
+        </div>
+        {% endif %}
+    </div>
+    
+    <p>We hope the issue has been resolved to your satisfaction. If you have any concerns or need further assistance, please don't hesitate to reach out.</p>
+    
+    <a href="#" class="button">💬 Contact Landlord</a>
+    
+    <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 5px; padding: 15px; margin: 20px 0;">
+        <p style="margin: 0; color: #856404;">
+            <strong>📝 Feedback:</strong> Your feedback helps us improve! Please let us know about your experience with this maintenance request.
+        </p>
+    </div>
+
+{% elif notification_type == 'cancelled' %}
+    <h2 style="color: #e17055; margin-bottom: 20px;">
+        ❌ Maintenance Request Cancelled
+    </h2>
+    
+    <p>Hello {{ recipient.first_name|default:recipient.username }},</p>
+    
+    <p>The maintenance request for your property has been cancelled.</p>
+    
+    <div class="property-info">
+        <h3 style="margin-top: 0; color: #2d3436;">❌ Cancellation Details</h3>
+        <p><strong>Property:</strong> {{ maintenance.property.title }}</p>
+        <p><strong>Request:</strong> {{ maintenance.description|truncatewords:15 }}</p>
+        <p><strong>Status:</strong> <span style="color: #e17055; font-weight: bold;">❌ Cancelled</span></p>
+        <p><strong>Cancelled Date:</strong> {{ maintenance.updated_at|date:"F d, Y \a\t g:i A" }}</p>
+        {% if maintenance.cancellation_reason %}
+        <div style="margin-top: 15px;">
+            <strong>Reason:</strong>
+            <p style="background-color: #fadbd8; padding: 15px; border-left: 4px solid #e17055; margin: 10px 0; font-style: italic;">
+                "{{ maintenance.cancellation_reason }}"
+            </p>
+        </div>
+        {% endif %}
+    </div>
+    
+    <p>If you have any questions about this cancellation or need to submit a new request, please contact us.</p>
+    
+    <a href="#" class="button">📝 Submit New Request</a>
+
+{% endif %}
+
+<div style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; padding: 15px; margin: 30px 0;">
+    <p style="margin: 0; color: #495057; font-size: 14px;">
+        <strong>Emergency Maintenance:</strong> For urgent issues that require immediate attention (water leaks, electrical problems, security issues), 
+        please contact the emergency maintenance line directly at <strong>(555) 123-4567</strong>.
+    </p>
+</div>
+{% endblock %}
