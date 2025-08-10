@@ -24,7 +24,7 @@ psycopg2-binary==2.9.7
 Pillow==10.0.1
 
 # Environment variables
-python-decodenv==0.19.2
+python-dotenv==1.0.0
 
 # Email and utilities
 requests==2.31.0
@@ -32,7 +32,7 @@ requests==2.31.0
 # Production server and utilities
 gunicorn==21.2.0
 dj-database-url==2.1.0
-mysqlclient==2.2.7
+# mysqlclient==2.2.7  # Not needed for PostgreSQL on Render
 
 # Development dependencies
 pytest==7.4.2
