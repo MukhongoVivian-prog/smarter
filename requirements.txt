@@ -1,3 +1,5 @@
+# SmartHunt Backend Requirements - Render Optimized
+
 # Core Django
 Django==4.2.23
 djangorestframework==3.14.0
@@ -9,7 +11,6 @@ dj-rest-auth==5.0.2
 
 # Real-time WebSocket support
 channels==4.0.0
-channels-redis==4.1.0
 
 # API filtering and pagination
 django-filter==23.3
@@ -32,19 +33,10 @@ requests==2.31.0
 # Production server and utilities
 gunicorn==21.2.0
 dj-database-url==2.1.0
-# mysqlclient==2.2.7  # Not needed for PostgreSQL on Render
-
-# Development dependencies
-pytest==7.4.2
-pytest-django==4.5.2
-factory-boy==3.3.0
-
-# Production dependencies
-gunicorn==21.2.0
 whitenoise==6.6.0
 
 # Redis for channels and caching
 redis==5.0.1
 
-# Logging and monitoring
+# Logging and monitoring (optional)
 sentry-sdk==1.38.0
