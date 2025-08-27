@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-@-^-3*02r*(&!ztj7ffb)wmr7t-5=1*pw65*kgxt7s7xudw_&@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['mukhongovivian.pythonanywhere.com']
+ALLOWED_HOSTS = ['mukhongovivian.pythonanywhere.com','127.0.0.1']
 
 
 # Application definition
@@ -57,7 +57,10 @@ INSTALLED_APPS = [
     'interactions',
     'dashboards',
     'chatbot',
-    'blog'
+    'blog',
+    'ussd',
+
+
 ]
 
 REST_FRAMEWORK = {
@@ -84,7 +87,8 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,                 # Blacklist old refresh tokens
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': SECRET_KEY,                        # Uses your Django SECRET_KEY
-    'AUTH_HEADER_TYPES': ('Bearer',),                 # Header format: Authorization: Bearer <token>
+    'AUTH_HEADER_TYPES': ('Bearer',),  
+                # Header format: Authorization: Bearer <token>
 }
 
 ASGI_APPLICATION = "smarthunt.asgi.application"
@@ -214,10 +218,9 @@ AUTHENTICATION_BACKENDS = [
 SITE_ID = 1
 
 # AllAuth configuration
-ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_LOGIN_METHODS = ['email']
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
 

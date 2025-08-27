@@ -19,4 +19,6 @@ urlpatterns = [
     path('api/interactions/', include('interactions.urls')), # Reviews, favorites, etc.
     path('api/dashboards/', include('dashboards.urls')),     # Landlord & Tenant dashboards
     path('api/chatbot/', include('chatbot.urls')),           # Chatbot integration
+    path('ussd/', include('ussd.urls')),           # Chatbot integration
+
 ]

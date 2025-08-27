@@ -17,7 +17,19 @@ from users.permissions import (
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
+from utils.sms_utils import send_sms
 
+class BookingRequestCreateView(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = BookingRequestSerializer
+
+    def perform_create(self, serializer):
+        booking_request = serializer.save()
+        # Send SMS to user
+        phone_number = booking_request.user.phone_number
+        message = f"Your booking request for {booking_request.property.title} has been received."
+        send_sms(phone_number, message)
+        return Response(serializer.data)
 # ------------------- MESSAGES -------------------
 class MessageListCreateView(generics.ListCreateAPIView):
     serializer_class = MessageSerializer
